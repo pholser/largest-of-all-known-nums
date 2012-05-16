@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include "Bignum.h"
 
-Bignum::Bignum(int n) {
-    store = std::vector<uint32_t>();
+Bignum::Bignum(int n) : store() {
     store.push_back(abs(n));
     signum = n == 0 ? 0 : (n < 0 ? -1 : 1);
 }

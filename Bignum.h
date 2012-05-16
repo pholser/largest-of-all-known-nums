@@ -10,8 +10,8 @@ class Bignum {
         Bignum(const std::vector<uint32_t>& digits, int sign);
         bool operator==(const Bignum& other) const;
         bool operator!=(const Bignum& other) const;
-        const Bignum operator+(const MyClass& other) const;
-        Bignum& operator+=(const MyClass& other);
+        const Bignum operator+(const Bignum& other) const;
+        Bignum& operator+=(const Bignum& other);
 
     private:
         std::vector<uint32_t> store;
