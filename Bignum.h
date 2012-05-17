@@ -7,7 +7,6 @@
 
 class Bignum {
     public:
-        Bignum(int);
         Bignum(const std::vector<uint32_t>& digits, int sign);
         Bignum(const Bignum& other);
         Bignum& operator=(const Bignum& other);

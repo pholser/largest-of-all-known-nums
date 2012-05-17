@@ -9,11 +9,6 @@ uint32_t digit(const std::vector<uint32_t>& digits, uint32_t index) {
     return index >= digits.size() ? 0U : digits[index];
 }
 
-Bignum::Bignum(int n) : store() {
-    store.push_back(abs(n));
-    signum = n == 0 ? 0 : (n < 0 ? -1 : 1);
-}
-
 Bignum::Bignum(const std::vector<uint32_t>& digits, int sign)
     : store(digits), signum(sign) {
 }
@@ -51,9 +46,9 @@ Bignum& Bignum::operator+=(const Bignum& other) {
 
     std::vector<uint32_t> new_digits;
 
-    std::cout << "base: " << Bignum::BASE << std::endl;
-    
     for (uint32_t j = 0; j < n; ++j) {
+        std::cout << "first digit: " << digit(store, j) << std::endl;
+	std::cout << "second digit: " << digit(other.store, j) << std::endl;
         uint64_t sum = digit(store, j) + digit(other.store, j) + k;
         new_digits.push_back(sum % Bignum::BASE);
         k = sum / Bignum::BASE;
