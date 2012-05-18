@@ -5,7 +5,7 @@
 
 const uint64_t Bignum::BASE = UINT32_MAX + 1ULL;
 
-uint32_t digit(const std::vector<uint32_t>& digits, uint32_t index) {
+uint64_t digit(const std::vector<uint32_t>& digits, uint32_t index) {
     return index >= digits.size() ? 0U : digits[index];
 }
 
@@ -41,18 +41,19 @@ const Bignum Bignum::operator+(const Bignum& other) const {
 }
 
 Bignum& Bignum::operator+=(const Bignum& other) {
-    uint32_t k = 0;
+    uint64_t k = 0;
     uint32_t n = std::max(store.size(), other.store.size());
 
     std::vector<uint32_t> new_digits;
 
     for (uint32_t j = 0; j < n; ++j) {
-        std::cout << "first digit: " << digit(store, j) << std::endl;
-	std::cout << "second digit: " << digit(other.store, j) << std::endl;
         uint64_t sum = digit(store, j) + digit(other.store, j) + k;
         new_digits.push_back(sum % Bignum::BASE);
         k = sum / Bignum::BASE;
     }
+
+    if (k != 0)
+        new_digits.push_back(k);
 
     store = new_digits;
     return *this;
@@ -62,9 +63,8 @@ std::ostream& operator<<(std::ostream& out, const Bignum& n) {
     out << "sign: " << n.signum << std::endl;
     out << "digits: " << std::endl;
 
-    for (std::vector<uint32_t>::size_type i = 0; i != n.store.size(); ++i) {
+    for (std::vector<uint32_t>::size_type i = 0; i != n.store.size(); ++i)
         out << i << ": " << std::hex << n.store[i] << std::endl;
-    }
 
     return out;
 }
