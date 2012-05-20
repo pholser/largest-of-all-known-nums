@@ -230,6 +230,48 @@ TEST(BignumTest, PositiveMinusLargerPositiveWithAssignment) {
     ASSERT_EQ(Bignum(d(1, 5U), -1), m);
 }
 
+TEST(BignumTest, NegativeMinusPositive) {
+    Bignum m(d(1, 5U), -1);
+    Bignum n(d(1, 7U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 12U), -1), m - n);
+}
+
+TEST(BignumTest, NegativeMinusPositiveWithAssignment) {
+    Bignum m(d(1, 5U), -1);
+    m -= Bignum(d(1, 35U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 40U), -1), m);
+}
+
+TEST(BignumTest, NegativeMinusSmallerNegative) {
+    Bignum m(d(1, 5U), -1);
+    Bignum n(d(1, 3U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 2U), -1), m - n);
+}
+
+TEST(BignumTest, NegativeMinusSmallerNegativeWithAssignment) {
+    Bignum m(d(1, 5U), -1);
+    m -= Bignum(d(1, 4U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 1U), -1), m);
+}
+
+TEST(BignumTest, NegativeMinusLargerNegative) {
+    Bignum m(d(1, 5U), -1);
+    Bignum n(d(1, 42U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 37U), 1), m - n);
+}
+
+TEST(BignumTest, NegativeMinusLargerNegativeWithAssignment) {
+    Bignum m(d(1, 17U), -1);
+    m -= Bignum(d(1, 73U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 56U), 1), m);
+}
+
 TEST(BignumTest, LargerSimpleSubtraction) {
     Bignum m(d(1, 0x10000000U), 1);
     Bignum n(d(1, 1U), 1);
