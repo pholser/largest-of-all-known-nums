@@ -78,6 +78,10 @@ Bignum operator+(const Bignum& left, const Bignum& right) {
 }
 
 const Bignum& Bignum::operator+=(const Bignum& other) {
+    if (other.sign == 0) {
+        return *this;
+    }
+
     uint64_t carry(0);
     std::vector<uint32_t>::size_type max_length = std::max(store.size(), other.store.size());
 
@@ -97,6 +101,10 @@ const Bignum& Bignum::operator+=(const Bignum& other) {
 }
 
 const Bignum& Bignum::operator-=(const Bignum& other) {
+    if (other.sign == 0) {
+        return *this;
+    }
+
     int64_t k = 0;
     std::vector<uint32_t>::size_type max_length = std::max(store.size(), other.store.size());
 
