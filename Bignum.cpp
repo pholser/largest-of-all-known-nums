@@ -26,12 +26,47 @@ Bignum& Bignum::operator=(const Bignum& other) {
     return *this;
 }
 
-bool Bignum::operator==(const Bignum& other) const {
+bool Bignum::equal(const Bignum& other) const {
     return store == other.store && signum == other.signum;
 }
 
-bool Bignum::operator!=(const Bignum& other) const {
-    return !(*this == other);
+bool Bignum::less(const Bignum& other) const {
+    if (signum < other.signum)
+        return true;
+
+    if (store.size() < other.store.size())
+        return true;
+
+    for (int i = store.size() - 1; i >= 0; --i) {
+        if (store[i] < other.store[i])
+            return true;
+    }
+
+    return false;
+}
+
+bool operator==(const Bignum& left, const Bignum& right) {
+    return left.equal(right);
+}
+
+bool operator!=(const Bignum& left, const Bignum& right) {
+    return !(left == right);
+}
+
+bool operator<(const Bignum& left, const Bignum& right) {
+    return left.less(right);
+}
+
+bool operator<=(const Bignum& left, const Bignum& right) {
+    return !(left > right);
+}
+
+bool operator>(const Bignum& left, const Bignum& right) {
+    return right < left;
+}
+
+bool operator>=(const Bignum& left, const Bignum& right) {
+    return right <= left;
 }
 
 Bignum operator+(const Bignum& left, const Bignum& right) {

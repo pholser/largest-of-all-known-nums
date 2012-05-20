@@ -4,7 +4,7 @@
 #include <tr1/cstdint>
 #include <cstdarg>
 
-Bignum make_bignum(int signum, int num_digits, ...) {
+std::vector<uint32_t> d(int num_digits, ...) {
     std::vector<uint32_t> digits;
 
     va_list args;
@@ -12,32 +12,84 @@ Bignum make_bignum(int signum, int num_digits, ...) {
     for (int i = 0; i < num_digits; ++i)
         digits.push_back(va_arg(args, uint32_t));
     va_end(args);
-    return Bignum(digits, signum);
+
+    return digits;
 }
 
-TEST(BignumTest, ABignumConstructedFromAnIntIsEqualToItself) {
-    Bignum n = make_bignum(1, 1, 2U);
+TEST(BignumTest, ABignumIsEqualToItself) {
+    Bignum n(d(1, 2U), 1);
 
     ASSERT_EQ(n, n);
 }
 
-TEST(BignumTest, BignumsConstructedFromTwoDifferentIntsAreNotEqual) {
-    Bignum m = make_bignum(1, 1, 5U);
-    Bignum n = make_bignum(-1, 1, 3U);
+TEST(BignumTest, DistinctButEquivalentBignumsAreEqual) {
+    Bignum m(d(1, 0x1234789DU), 1);
+    Bignum n(d(1, 0x1234789DU), 1);
+
+    ASSERT_EQ(m, n);
+}
+
+TEST(BignumTest, DistinctAndNotEquivalentBignumsAreNotEqual) {
+    Bignum m(d(1, 5U), 1);
+    Bignum n(d(1, 3U), -1);
 
     ASSERT_NE(m, n);
 }
 
+TEST(BignumTest, BignumsAreNotEqualIfTheirSignsAreDifferent) {
+    Bignum m(d(1, 7U), 1);
+    Bignum n(d(1, 7U), -1);
+
+    ASSERT_NE(m, n);
+}
+
+TEST(BignumTest, SimpleAddition) {
+    Bignum m(d(1, 1U), 1);
+    Bignum n(d(1, 0U), 0);
+
+    ASSERT_EQ(Bignum(d(1, 1U), 1), m + n);
+}
+
+TEST(BignumTest, SimpleAdditionWithAssignment) {
+    Bignum m(d(1, 2U), 1);
+    m += Bignum(d(1, 1U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 3U), 1), m);
+}
+
+TEST(BignumTest, LargerSimpleAddition) {
+    Bignum m(d(1, 0x0FFFFFFFU), 1);
+    Bignum n(d(1, 1U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x10000000U), 1), m + n);
+}
+
 TEST(BignumTest, AddingTwoBignumsCanCreateMultipleBigDigits) {
-    std::vector<uint32_t> digits;
-    digits.push_back(0xFFFFFFFFU);
-    std::vector<uint32_t> other_digits;
-    other_digits.push_back(0x0000001U);
+    Bignum m(d(1, 0xFFFFFFFFU), 1);
+    Bignum n(d(1, 0x00000001U), 1);
 
-    Bignum m = make_bignum(1, 1, 0xFFFFFFFFU);
-    Bignum n = make_bignum(1, 1, 0x00000001U);
-    Bignum expected = make_bignum(1, 2, 0x00000000U, 0x00000001U);
-    Bignum actual(m + n);
+    ASSERT_EQ(Bignum(d(2, 0x00000000U, 0x00000001U), 1), m + n);
+}
 
-    ASSERT_EQ(expected, actual);
+TEST(BignumTest, StillLargerSimpleAddition) {
+    Bignum m(d(2, 0xFFFFFFFFU, 0x00FFFFFFU), 1);
+    Bignum n(d(1, 0x00000001U), 1);
+
+    ASSERT_EQ(Bignum(d(2, 0x00000000U, 0x01000000U), 1), m + n);
+}
+
+TEST(BignumTest, LargePowerOfTwoSimpleAddition) {
+    Bignum m(d(6, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00001000U), 1);
+    Bignum n(d(1, 0x00000001U), 1);
+    Bignum expected =
+        Bignum(d(6, 0x00000001U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00001000U), 1);
+
+    ASSERT_EQ(expected, m + n);
+}
+
+TEST(BignumTest, NegativeNumberLessThanPositiveNumber) {
+    Bignum m(d(1, 1U), -1);
+    Bignum n(d(1, 0U), 0);
+
+    ASSERT_LT(m, n);
 }
