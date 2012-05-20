@@ -105,6 +105,48 @@ TEST(BignumTest, LargePowerOfTwoSimpleAddition) {
     ASSERT_EQ(expected, m + n);
 }
 
+TEST(BignumTest, LargerPositivePlusSmallerNegative) {
+    Bignum m(d(1, 3U), 1);
+    Bignum n(d(1, 2U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 1U), 1), m + n);
+}
+
+TEST(BignumTest, LargerPositivePlusSmallerNegativeWithAssignment) {
+    Bignum m(d(1, 4U), 1);
+    m += Bignum(d(1, 3U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 1U), 1), m);
+}
+
+TEST(BignumTest, LargerNegativePlusSmallerPositive) {
+    Bignum m(d(1, 5U), -1);
+    Bignum n(d(1, 2U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 3U), -1), m + n);
+}
+
+TEST(BignumTest, LargerNegativePlusSmallerPositiveWithAssignment) {
+    Bignum m(d(1, 6U), -1);
+    m += Bignum(d(1, 2U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 4U), -1), m);
+}
+
+TEST(BignumTest, NegativePlusNegative) {
+    Bignum m(d(1, 3U), -1);
+    Bignum n(d(1, 2U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 5U), -1), m + n);
+}
+
+TEST(BignumTest, NegativePlusNegativeWithAssignment) {
+    Bignum m(d(1, 4U), -1);
+    m += Bignum(d(1, 3U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 7U), 1), m);
+}
+
 TEST(BignumTest, NegativeNumberLessThanPositiveNumber) {
     Bignum m(d(1, 1U), -1);
     Bignum n(d(1, 2U), 1);
@@ -174,11 +216,18 @@ TEST(BignumTest, SimpleSubtractionWithAssignment) {
     ASSERT_EQ(Bignum(d(1, 2U), 1), m);
 }
 
-TEST(BignumTest, PositiveMinusLargerPositiveIsNegative) {
+TEST(BignumTest, PositiveMinusLargerPositive) {
     Bignum m(d(1, 5U), 1);
     Bignum n(d(1, 7U), 1);
 
     ASSERT_EQ(Bignum(d(1, 2U), -1), m - n);
+}
+
+TEST(BignumTest, PositiveMinusLargerPositiveWithAssignment) {
+    Bignum m(d(1, 8U), 1);
+    m -= Bignum(d(1, 13U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 5U), -1), m);
 }
 
 TEST(BignumTest, LargerSimpleSubtraction) {
