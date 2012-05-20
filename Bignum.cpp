@@ -93,7 +93,7 @@ const Bignum& Bignum::operator+=(const Bignum& other) {
 }
 
 const Bignum& Bignum::operator-=(const Bignum& other) {
-    uint64_t k = 0;
+    int64_t k = 0;
     std::vector<uint32_t>::size_type max_length = std::max(store.size(), other.store.size());
 
     std::vector<uint32_t> new_digits;
