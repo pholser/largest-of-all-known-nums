@@ -17,12 +17,14 @@ class Bignum {
         bool equal(const Bignum& other) const;
         bool less(const Bignum& other) const;
 
+        int signum() const;
+
         friend std::ostream& operator<<(std::ostream& out, const Bignum& n);
 
     private:
         static const uint64_t BASE;
         std::vector<uint32_t> store;
-        int signum;
+        int sign;
 };
 
 bool operator==(const Bignum& left, const Bignum& right);

@@ -43,6 +43,24 @@ TEST(BignumTest, BignumsAreNotEqualIfTheirSignsAreDifferent) {
     ASSERT_NE(m, n);
 }
 
+TEST(BignumTest, SignumOfNegative) {
+    Bignum n(d(1, 3U), -1);
+
+    ASSERT_EQ(-1, n.signum());
+}
+
+TEST(BignumTest, SignumOfZero) {
+    Bignum n(d(1, 0U), 0);
+
+    ASSERT_EQ(0, n.signum());
+}
+
+TEST(BignumTest, SignumOfPositive) {
+    Bignum n(d(1, 7U), 1);
+
+    ASSERT_EQ(1, n.signum());
+}
+
 TEST(BignumTest, SimpleAddition) {
     Bignum m(d(1, 1U), 1);
     Bignum n(d(1, 0U), 0);

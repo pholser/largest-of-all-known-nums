@@ -10,39 +10,43 @@ uint64_t digit(const std::vector<uint32_t>& digits, std::vector<uint32_t>::size_
 }
 
 Bignum::Bignum(const std::vector<uint32_t>& digits, int sign)
-    : store(digits), signum(sign) {
+    : store(digits), sign(sign) {
 }
 
 Bignum::Bignum(const Bignum& other)
-    : store(other.store), signum(other.signum) {
+    : store(other.store), sign(other.sign) {
 }
 
 Bignum& Bignum::operator=(const Bignum& other) {
     if (this != &other) {
         store = other.store;
-        signum = other.signum;
+        sign = other.sign;
     }
 
     return *this;
 }
 
 bool Bignum::equal(const Bignum& other) const {
-    return store == other.store && signum == other.signum;
+    return store == other.store && sign == other.sign;
 }
 
 bool Bignum::less(const Bignum& other) const {
-    if (signum < other.signum)
+    if (sign < other.sign)
         return true;
 
     if (store.size() < other.store.size())
         return true;
 
     for (int i = store.size() - 1; i >= 0; --i) {
-        if (signum < 0 ? store[i] > other.store[i] : store[i] < other.store[i])
+        if (sign < 0 ? store[i] > other.store[i] : store[i] < other.store[i])
             return true;
     }
 
     return false;
+}
+
+int Bignum::signum() const {
+    return sign;
 }
 
 bool operator==(const Bignum& left, const Bignum& right) {
@@ -113,7 +117,7 @@ Bignum operator-(const Bignum& left, const Bignum& right) {
 }
 
 std::ostream& operator<<(std::ostream& out, const Bignum& n) {
-    out << "sign: " << n.signum << std::endl;
+    out << "sign: " << n.sign << std::endl;
     out << "digits: " << std::endl;
 
     for (std::vector<uint32_t>::size_type i = 0; i != n.store.size(); ++i)
