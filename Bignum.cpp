@@ -34,28 +34,30 @@ bool Bignum::operator!=(const Bignum& other) const {
     return !(*this == other);
 }
 
-const Bignum Bignum::operator+(const Bignum& other) const {
-    Bignum result = *this;
-    result += other;
-    return result;
+Bignum operator+(const Bignum& left, const Bignum& right) {
+    return Bignum(left) += right;
 }
 
-Bignum& Bignum::operator+=(const Bignum& other) {
-    uint64_t k = 0;
-    uint32_t n = std::max(store.size(), other.store.size());
+const Bignum& Bignum::operator+=(const Bignum& other) {
+    uint64_t carry(0);
+    uint32_t max_length = std::max(store.size(), other.store.size());
 
     std::vector<uint32_t> new_digits;
 
-    for (uint32_t j = 0; j < n; ++j) {
-        uint64_t sum = digit(store, j) + digit(other.store, j) + k;
+    for (uint32_t i = 0; i < max_length; ++i) {
+        uint64_t sum = digit(store, i) + digit(other.store, i) + carry;
         new_digits.push_back(sum % Bignum::BASE);
-        k = sum / Bignum::BASE;
+        carry = sum / Bignum::BASE;
     }
 
-    if (k != 0)
-        new_digits.push_back(k);
+    if (carry != 0)
+        new_digits.push_back(carry);
 
     store = new_digits;
+    return *this;
+}
+
+const Bignum& Bignum::operator-=(const Bignum& other) {
     return *this;
 }
 
