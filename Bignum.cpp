@@ -5,7 +5,7 @@
 
 const uint64_t Bignum::BASE = UINT32_MAX + 1ULL;
 
-uint64_t digit(const std::vector<uint32_t>& digits, uint32_t index) {
+uint64_t digit(const std::vector<uint32_t>& digits, std::vector<uint32_t>::size_type index) {
     return index >= digits.size() ? 0U : digits[index];
 }
 
@@ -75,11 +75,11 @@ Bignum operator+(const Bignum& left, const Bignum& right) {
 
 const Bignum& Bignum::operator+=(const Bignum& other) {
     uint64_t carry(0);
-    uint32_t max_length = std::max(store.size(), other.store.size());
+    std::vector<uint32_t>::size_type max_length = std::max(store.size(), other.store.size());
 
     std::vector<uint32_t> new_digits;
 
-    for (uint32_t i = 0; i < max_length; ++i) {
+    for (std::vector<uint32_t>::size_type i = 0; i < max_length; ++i) {
         uint64_t sum = digit(store, i) + digit(other.store, i) + carry;
         new_digits.push_back(sum % Bignum::BASE);
         carry = sum / Bignum::BASE;
@@ -93,7 +93,23 @@ const Bignum& Bignum::operator+=(const Bignum& other) {
 }
 
 const Bignum& Bignum::operator-=(const Bignum& other) {
+    uint64_t k = 0;
+    std::vector<uint32_t>::size_type max_length = std::max(store.size(), other.store.size());
+
+    std::vector<uint32_t> new_digits;
+
+    for (std::vector<uint32_t>::size_type i = 0; i < max_length; ++i) {
+        uint64_t difference = digit(store, i) - digit(other.store, i) + k;
+        new_digits.push_back(difference % Bignum::BASE);
+        k = difference / Bignum::BASE;
+    }
+
+    store = new_digits;
     return *this;
+}
+
+Bignum operator-(const Bignum& left, const Bignum& right) {
+    return Bignum(left) -= right;
 }
 
 std::ostream& operator<<(std::ostream& out, const Bignum& n) {

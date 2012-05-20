@@ -135,3 +135,24 @@ TEST(BignumTest, NegativeNumberOfLesserMagnitudeLessThanPositiveNumberOfGreaterM
 
     ASSERT_LT(m, n);
 }
+
+TEST(BignumTest, SimpleSubtraction) {
+    Bignum m(d(1, 1U), 1);
+    Bignum n(d(1, 0U), 0);
+
+    ASSERT_EQ(Bignum(d(1, 1U), 1), m - n);
+}
+
+TEST(BignumTest, SimpleSubtractionWithAssignment) {
+    Bignum m(d(1, 5U), 1);
+    m -= Bignum(d(1, 3U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 2U), 1), m);
+}
+
+TEST(BignumTest, LargerSimpleSubtraction) {
+    Bignum m(d(1, 0x10000000U), 1);
+    Bignum n(d(1, 1U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x0FFFFFFFU), 1), m - n);
+}
