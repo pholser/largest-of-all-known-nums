@@ -116,6 +116,10 @@ Bignum operator-(const Bignum& left, const Bignum& right) {
     return Bignum(left) -= right;
 }
 
+Bignum Bignum::operator-() const {
+    return Bignum(store, -sign);
+}
+
 std::ostream& operator<<(std::ostream& out, const Bignum& n) {
     out << "sign: " << n.sign << std::endl;
     out << "digits: " << std::endl;
