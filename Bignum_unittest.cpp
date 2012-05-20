@@ -89,7 +89,49 @@ TEST(BignumTest, LargePowerOfTwoSimpleAddition) {
 
 TEST(BignumTest, NegativeNumberLessThanPositiveNumber) {
     Bignum m(d(1, 1U), -1);
-    Bignum n(d(1, 0U), 0);
+    Bignum n(d(1, 2U), 1);
+
+    ASSERT_LT(m, n);
+}
+
+TEST(BignumTest, NegativeNumberOfGreaterMagnitudeLessThanNegativeNumberOfLesserMagnitude) {
+    Bignum m(d(1, 3U), -1);
+    Bignum n(d(1, 2U), -1);
+
+    ASSERT_LT(m, n);
+}
+
+TEST(BignumTest, NegativeNumberOfGreaterMagnitudeLessThanNegativeNumberOfLesserMagnitudeLarge) {
+    Bignum m(d(3, 0xFFFFFFFFU, 0xFFFFFFFFU, 0x12345679U), -1);
+    Bignum n(d(3, 0xFFFFFFFFU, 0xFFFFFFFFU, 0x12345678U), -1);
+
+    ASSERT_LT(m, n);
+}
+
+TEST(BignumTest, NegativeNumberOfGreaterMagnitudeLessThanPositiveNumberOfLesserMagnitudeLarge) {
+    Bignum m(d(3, 0xFFFFFFFFU, 0xFFFFFFFFU, 0x12345679U), -1);
+    Bignum n(d(3, 0xFFFFFFFFU, 0xFFFFFFFFU, 0x12345678U), 1);
+
+    ASSERT_LT(m, n);
+}
+
+TEST(BignumTest, PositiveNumberOfLesserMagnitudeLessThanPositiveNumberOfGreaterMagnitude) {
+    Bignum m(d(1, 3U), 1);
+    Bignum n(d(1, 4U), 1);
+
+    ASSERT_LT(m, n);
+}
+
+TEST(BignumTest, PositiveNumberOfLesserMagnitudeLessThanPositiveNumberOfGreaterMagnitudeLarge) {
+    Bignum m(d(4, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000001U), 1);
+    Bignum n(d(4, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000002U), 1);
+
+    ASSERT_LT(m, n);
+}
+
+TEST(BignumTest, NegativeNumberOfLesserMagnitudeLessThanPositiveNumberOfGreaterMagnitudeLarge) {
+    Bignum m(d(4, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000001U), -1);
+    Bignum n(d(4, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000002U), 1);
 
     ASSERT_LT(m, n);
 }

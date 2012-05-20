@@ -38,7 +38,7 @@ bool Bignum::less(const Bignum& other) const {
         return true;
 
     for (int i = store.size() - 1; i >= 0; --i) {
-        if (store[i] < other.store[i])
+        if (signum < 0 ? store[i] > other.store[i] : store[i] < other.store[i])
             return true;
     }
 
