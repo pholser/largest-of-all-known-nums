@@ -49,6 +49,10 @@ int Bignum::signum() const {
     return sign;
 }
 
+Bignum Bignum::abs() const {
+    return sign >= 0 ? Bignum(*this) : Bignum(store, 1);
+}
+
 bool operator==(const Bignum& left, const Bignum& right) {
     return left.equal(right);
 }

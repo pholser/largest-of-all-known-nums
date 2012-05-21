@@ -278,3 +278,21 @@ TEST(BignumTest, LargerSimpleSubtraction) {
 
     ASSERT_EQ(Bignum(d(1, 0x0FFFFFFFU), 1), m - n);
 }
+
+TEST(BignumTest, AbsoluteValueOfNegativeNumber) {
+    Bignum m(d(4, 0x01234567U, 0x89ABCDEFU, 0x12345678U, 0x9ABCDEF0U), -1);
+
+    ASSERT_EQ(Bignum(d(4, 0x01234567U, 0x89ABCDEFU, 0x12345678U, 0x9ABCDEF0U), 1), m.abs());
+}
+
+TEST(BignumTest, AbsoluteValueOfPositiveNumber) {
+    Bignum n(d(1, 1U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 1U), 1), n.abs());
+}
+
+TEST(BignumTest, AbsoluteValueOfZero) {
+    Bignum n(d(1, 0U), 0);
+
+    ASSERT_EQ(Bignum(d(1, 0U), 0), n.abs());
+}

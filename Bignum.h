@@ -17,6 +17,7 @@ class Bignum {
         bool equal(const Bignum& other) const;
         bool less(const Bignum& other) const;
         Bignum operator-() const;
+        Bignum abs() const;
 
         int signum() const;
 
