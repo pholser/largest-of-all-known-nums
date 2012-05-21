@@ -144,7 +144,7 @@ TEST(BignumTest, NegativePlusNegativeWithAssignment) {
     Bignum m(d(1, 4U), -1);
     m += Bignum(d(1, 3U), -1);
 
-    ASSERT_EQ(Bignum(d(1, 7U), 1), m);
+    ASSERT_EQ(Bignum(d(1, 7U), -1), m);
 }
 
 TEST(BignumTest, NegativeNumberLessThanPositiveNumber) {
