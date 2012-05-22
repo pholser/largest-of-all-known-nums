@@ -27,9 +27,8 @@ std::vector<uint32_t> add(const std::vector<uint32_t>& first, const std::vector<
 }
 
 std::vector<uint32_t> subtract(const std::vector<uint32_t>& first, const std::vector<uint32_t>& second) {
-    int64_t borrow = 0;
     std::vector<uint32_t>::size_type max_length = std::max(first.size(), second.size());
-
+    int64_t borrow(0);
     std::vector<uint32_t> difference_digits;
 
     for (std::vector<uint32_t>::size_type i = 0; i < max_length; ++i) {
