@@ -147,6 +147,13 @@ TEST(BignumTest, NegativePlusNegativeWithAssignment) {
     ASSERT_EQ(Bignum(d(1, 7U), -1), m);
 }
 
+TEST(BignumTest, PositivePlusNegativeOfSameMagnitude) {
+    Bignum m(d(2, 0x12341234U, 0x56785678U), 1);
+    m += Bignum(d(2, 0x12341234U, 0x56785678U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 0U), 0), m);
+}
+
 TEST(BignumTest, NegativeNumberLessThanPositiveNumber) {
     Bignum m(d(1, 1U), -1);
     Bignum n(d(1, 2U), 1);
@@ -277,6 +284,20 @@ TEST(BignumTest, LargerSimpleSubtraction) {
     Bignum n(d(1, 1U), 1);
 
     ASSERT_EQ(Bignum(d(1, 0x0FFFFFFFU), 1), m - n);
+}
+
+TEST(BignumTest, PositiveMinusPositiveOfSameMagnitude) {
+    Bignum m(d(3, 0x1U, 0x2U, 0x3U), 1);
+    m -= Bignum(d(3, 0x1U, 0x2U, 0x3U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 0U), 0), m);
+}
+
+TEST(BignumTest, NegativeMinusNegativeOfSameMagnitude) {
+    Bignum m(d(3, 0x4U, 0x5U, 0x6U), -1);
+    m -= Bignum(d(3, 0x4U, 0x5U, 0x6U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 0U), 0), m);
 }
 
 TEST(BignumTest, AbsoluteValueOfNegativeNumber) {
