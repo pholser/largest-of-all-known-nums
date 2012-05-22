@@ -26,6 +26,26 @@ std::vector<uint32_t> add(const std::vector<uint32_t>& first, const std::vector<
     return sum_digits;
 }
 
+std::vector<uint32_t> subtract(const std::vector<uint32_t>& first, const std::vector<uint32_t>& second) {
+    int64_t borrow = 0;
+    std::vector<uint32_t>::size_type max_length = std::max(first.size(), second.size());
+
+    std::vector<uint32_t> difference_digits;
+
+    for (std::vector<uint32_t>::size_type i = 0; i < max_length; ++i) {
+        int64_t difference = digit(first, i) - digit(second, i) - borrow;
+        if (difference < 0) {
+            difference += Bignum::BASE;
+            borrow = 1;
+        } else
+            borrow = 0;
+
+        difference_digits.push_back(difference % Bignum::BASE);
+    }
+
+    return difference_digits;
+}
+
 Bignum::Bignum(const std::vector<uint32_t>& digits, int sign)
     : store(digits), sign(sign) {
 }
@@ -103,13 +123,20 @@ const Bignum& Bignum::operator+=(const Bignum& other) {
         return *this;
     }
 
-    // have free function adding two vectors of digits?
+    Bignum this_abs = abs();
+    Bignum other_abs = other.abs();
+
     if (sign == other.sign) {
-        store = add(abs().store, other.abs().store);
-        return *this;
+        store = add(this_abs.store, other_abs.store);
+    } else {
+        if (this_abs > other_abs)
+            store = subtract(this_abs.store, other_abs.store);
+        else {
+            store = subtract(other_abs.store, this_abs.store);
+            sign = other.sign;
+        }
     }
 
-    store = add(store, other.store);
     return *this;
 }
 
@@ -118,18 +145,20 @@ const Bignum& Bignum::operator-=(const Bignum& other) {
         return *this;
     }
 
-    int64_t k = 0;
-    std::vector<uint32_t>::size_type max_length = std::max(store.size(), other.store.size());
+    Bignum this_abs = abs();
+    Bignum other_abs = other.abs();
 
-    std::vector<uint32_t> new_digits;
-
-    for (std::vector<uint32_t>::size_type i = 0; i < max_length; ++i) {
-        uint64_t difference = digit(store, i) - digit(other.store, i) + k;
-        new_digits.push_back(difference % Bignum::BASE);
-        k = difference / Bignum::BASE;
+    if (sign != other.sign) {
+        store = add(this_abs.store, other_abs.store);
+    } else {
+        if (this_abs > other_abs)
+            store = subtract(this_abs.store, other_abs.store);
+        else {
+            store = subtract(other_abs.store, this_abs.store);
+            sign = -sign;
+        }
     }
 
-    store = new_digits;
     return *this;
 }
 
