@@ -9,6 +9,23 @@ uint64_t digit(const std::vector<uint32_t>& digits, std::vector<uint32_t>::size_
     return index >= digits.size() ? 0U : digits[index];
 }
 
+std::vector<uint32_t> add(const std::vector<uint32_t>& first, const std::vector<uint32_t>& second) {
+    std::vector<uint32_t>::size_type max_length = std::max(first.size(), second.size());
+    uint64_t carry(0);
+    std::vector<uint32_t> sum_digits;
+
+    for (std::vector<uint32_t>::size_type i = 0; i < max_length; ++i) {
+        uint64_t sum = digit(first, i) + digit(second, i) + carry;
+        sum_digits.push_back(sum % Bignum::BASE);
+        carry = sum / Bignum::BASE;
+    }
+
+    if (carry != 0)
+        sum_digits.push_back(carry);
+
+    return sum_digits;
+}
+
 Bignum::Bignum(const std::vector<uint32_t>& digits, int sign)
     : store(digits), sign(sign) {
 }
@@ -86,21 +103,13 @@ const Bignum& Bignum::operator+=(const Bignum& other) {
         return *this;
     }
 
-    uint64_t carry(0);
-    std::vector<uint32_t>::size_type max_length = std::max(store.size(), other.store.size());
-
-    std::vector<uint32_t> new_digits;
-
-    for (std::vector<uint32_t>::size_type i = 0; i < max_length; ++i) {
-        uint64_t sum = digit(store, i) + digit(other.store, i) + carry;
-        new_digits.push_back(sum % Bignum::BASE);
-        carry = sum / Bignum::BASE;
+    // have free function adding two vectors of digits?
+    if (sign == other.sign) {
+        store = add(abs().store, other.abs().store);
+        return *this;
     }
 
-    if (carry != 0)
-        new_digits.push_back(carry);
-
-    store = new_digits;
+    store = add(store, other.store);
     return *this;
 }
 

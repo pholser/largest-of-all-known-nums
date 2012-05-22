@@ -7,6 +7,8 @@
 
 class Bignum {
     public:
+        static const uint64_t BASE;
+
         Bignum(const std::vector<uint32_t>& digits, int sign);
         Bignum(const Bignum& other);
         Bignum& operator=(const Bignum& other);
@@ -24,7 +26,6 @@ class Bignum {
         friend std::ostream& operator<<(std::ostream& out, const Bignum& n);
 
     private:
-        static const uint64_t BASE;
         std::vector<uint32_t> store;
         int sign;
 };
