@@ -28,6 +28,8 @@ class Bignum {
     private:
         std::vector<uint32_t> store;
         int sign;
+
+        void reconcile_sign_of_zero();
 };
 
 bool operator==(const Bignum& left, const Bignum& right);

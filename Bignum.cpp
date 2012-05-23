@@ -9,6 +9,11 @@ uint64_t digit(const std::vector<uint32_t>& digits, std::vector<uint32_t>::size_
     return index >= digits.size() ? 0U : digits[index];
 }
 
+void strip_leading_zeros(std::vector<uint32_t>& digits) {
+    for (std::vector<uint32_t>::reverse_iterator i = digits.rbegin(); *i == 0U && digits.size() > 1; ++i)
+        digits.erase((++i).base());
+}
+
 std::vector<uint32_t> add(const std::vector<uint32_t>& first, const std::vector<uint32_t>& second) {
     std::vector<uint32_t>::size_type max_length = std::max(first.size(), second.size());
     uint64_t carry(0);
@@ -23,6 +28,7 @@ std::vector<uint32_t> add(const std::vector<uint32_t>& first, const std::vector<
     if (carry != 0)
         sum_digits.push_back(carry);
 
+    strip_leading_zeros(sum_digits);
     return sum_digits;
 }
 
@@ -42,6 +48,7 @@ std::vector<uint32_t> subtract(const std::vector<uint32_t>& first, const std::ve
         difference_digits.push_back(difference % Bignum::BASE);
     }
 
+    strip_leading_zeros(difference_digits);
     return difference_digits;
 }
 
@@ -136,6 +143,8 @@ const Bignum& Bignum::operator+=(const Bignum& other) {
         }
     }
 
+    reconcile_sign_of_zero();
+
     return *this;
 }
 
@@ -158,6 +167,8 @@ const Bignum& Bignum::operator-=(const Bignum& other) {
         }
     }
 
+    reconcile_sign_of_zero();
+
     return *this;
 }
 
@@ -167,6 +178,11 @@ Bignum operator-(const Bignum& left, const Bignum& right) {
 
 Bignum Bignum::operator-() const {
     return Bignum(store, -sign);
+}
+
+void Bignum::reconcile_sign_of_zero() {
+    if (store.size() == 1 && store[0] == 0U)
+        sign = 0;
 }
 
 std::ostream& operator<<(std::ostream& out, const Bignum& n) {
