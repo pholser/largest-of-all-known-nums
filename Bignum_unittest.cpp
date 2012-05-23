@@ -286,6 +286,54 @@ TEST(BignumTest, LargerSimpleSubtraction) {
     ASSERT_EQ(Bignum(d(1, 0x0FFFFFFFU), 1), m - n);
 }
 
+TEST(BignumTest, StillLargerSimpleSubtraction) {
+    Bignum m(d(2, 0x00000000U, 0x01000000), 1);
+    Bignum n(d(1, 1U), 1);
+
+    ASSERT_EQ(Bignum(d(2, 0xFFFFFFFFU, 0x00FFFFFFU), 1), m - n);
+}
+
+TEST(BignumTest, EnormousSimpleSubtraction) {
+    Bignum m(d(6, 0x00000001U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00001000U), 1);
+    Bignum n(d(1, 1U), 1);
+
+    ASSERT_EQ(
+        Bignum(d(6, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00001000U), 1),
+        m - n);
+}
+
+TEST(BignumTest, LargeSubtractionSmallResult) {
+    Bignum m(d(2, 0x00000001U, 0x00010000U), 1);
+    Bignum n(d(2, 0x00000000U, 0x00010000U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x00000001U), 1), m - n);
+}
+
+TEST(BignumTest, LargeSubtractionMediumResult) {
+    Bignum m(d(2, 0x0FFFFFFFU, 0x00010000U), 1);
+    Bignum n(d(2, 0x00000000U, 0x00010000U), 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x0FFFFFFFU), 1), m - n);
+}
+
+TEST(BignumTest, EnormousSubtractionMediumResult) {
+    Bignum m(d(6, 0x00000000U, 0x00010000U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00001000U), 1);
+    Bignum n(d(2, 0x00000000U, 0x00010000U), 1);
+
+    ASSERT_EQ(
+        Bignum(d(6, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U, 0x00001000U), 1),
+        m - n);
+}
+
+TEST(BignumTest, AnotherEnormousSubtractionMediumResult) {
+    Bignum m(d(6, 0xFFFFFFFFU, 0x0000FFFFU, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000100U), 1);
+    Bignum n(d(2, 0x00000000U, 0x00010000U), 1);
+
+    ASSERT_EQ(
+        Bignum(d(6, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFF, 0xFFFFFFFFU, 0x000000FFU), 1),
+        m - n);
+}
+
 TEST(BignumTest, PositiveMinusPositiveOfSameMagnitude) {
     Bignum m(d(3, 0x1U, 0x2U, 0x3U), 1);
     m -= Bignum(d(3, 0x1U, 0x2U, 0x3U), 1);
