@@ -52,6 +52,14 @@ std::vector<uint32_t> subtract(const std::vector<uint32_t>& first, const std::ve
     return difference_digits;
 }
 
+Bignum::Bignum(int64_t value) : store() {
+    sign = value < 0 ? -1 : (value == 0 ? 0 : 1);
+    uint64_t no_sign = (uint64_t) value;
+    store.push_back((uint32_t) (no_sign & 0x00000000FFFFFFFFULL));
+    store.push_back((uint32_t) (no_sign >> 32));
+    strip_leading_zeros(store);
+}
+
 Bignum::Bignum(const std::vector<uint32_t>& digits, int sign)
     : store(digits), sign(sign) {
 }

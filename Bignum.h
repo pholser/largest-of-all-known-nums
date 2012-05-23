@@ -9,6 +9,7 @@ class Bignum {
     public:
         static const uint64_t BASE;
 
+        Bignum(int64_t value);
         Bignum(const std::vector<uint32_t>& digits, int sign);
         Bignum(const Bignum& other);
         Bignum& operator=(const Bignum& other);

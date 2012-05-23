@@ -16,6 +16,12 @@ std::vector<uint32_t> d(int num_digits, ...) {
     return digits;
 }
 
+TEST(BignumTest, ConstructingABignumFromAPositiveInt) {
+    Bignum n(123456);
+
+    ASSERT_EQ(Bignum(d(1, 0x0001E240U), 1), n);
+}
+
 TEST(BignumTest, ABignumIsEqualToItself) {
     Bignum n(d(1, 2U), 1);
 
