@@ -188,6 +188,17 @@ Bignum Bignum::operator-() const {
     return Bignum(store, -sign);
 }
 
+Bignum& operator++(Bignum& n) {
+    n += 1;
+    return n;
+}
+
+Bignum operator++(Bignum& n, int) {
+    Bignum old(n);
+    ++n;
+    return old;
+}
+
 void Bignum::reconcile_sign_of_zero() {
     if (store.size() == 1 && store[0] == 0U)
         sign = 0;

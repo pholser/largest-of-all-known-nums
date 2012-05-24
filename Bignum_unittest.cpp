@@ -371,3 +371,19 @@ TEST(BignumTest, AbsoluteValueOfZero) {
 
     ASSERT_EQ(Bignum(d(1, 0U), 0), n.abs());
 }
+
+TEST(BignumTest, PrefixIncrement) {
+    Bignum m(34);
+    Bignum n = ++m;
+
+    ASSERT_EQ(Bignum(35), m);
+    ASSERT_EQ(Bignum(35), n);
+}
+
+TEST(BignumTest, PostfixIncrement) {
+    Bignum m(67);
+    Bignum n = m++;
+
+    ASSERT_EQ(Bignum(68), m);
+    ASSERT_EQ(Bignum(67), n);
+}
