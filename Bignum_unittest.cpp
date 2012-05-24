@@ -209,10 +209,22 @@ TEST(BignumTest, NegativeNumberOfLesserMagnitudeLessThanPositiveNumberOfGreaterM
     ASSERT_LT(m, n);
 }
 
-TEST(BignumTest, Negation) {
+TEST(BignumTest, NegationOfPositiveNumber) {
     Bignum n(d(1, 8U), 1);
 
     ASSERT_EQ(Bignum(d(1, 8U), -1), -n);
+}
+
+TEST(BignumTest, NegationOfNegativeNumber) {
+    Bignum n(d(1, 36U), -1);
+
+    ASSERT_EQ(Bignum(d(1, 36U), 1), -n);
+}
+
+TEST(BignumTest, NegationOfZero) {
+    Bignum n(d(1, 0U), 0);
+
+    ASSERT_EQ(Bignum(d(1, 0U), 0), -n);
 }
 
 TEST(BignumTest, SimpleSubtraction) {
@@ -381,9 +393,25 @@ TEST(BignumTest, PrefixIncrement) {
 }
 
 TEST(BignumTest, PostfixIncrement) {
-    Bignum m(67);
+    Bignum m(-67);
     Bignum n = m++;
 
-    ASSERT_EQ(Bignum(68), m);
-    ASSERT_EQ(Bignum(67), n);
+    ASSERT_EQ(Bignum(-66), m);
+    ASSERT_EQ(Bignum(-67), n);
+}
+
+TEST(BignumTest, PrefixDecrement) {
+    Bignum m(-4);
+    Bignum n = --m;
+
+    ASSERT_EQ(Bignum(-5), m);
+    ASSERT_EQ(Bignum(-5), n);
+}
+
+TEST(BignumTest, PostfixDecrement) {
+    Bignum m(88);
+    Bignum n = m--;
+
+    ASSERT_EQ(Bignum(87), m);
+    ASSERT_EQ(Bignum(88), n);
 }
