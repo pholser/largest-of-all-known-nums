@@ -22,6 +22,12 @@ TEST(BignumTest, ConstructingABignumFromAPositiveInt) {
     ASSERT_EQ(Bignum(d(1, 0x0001E240U), 1), n);
 }
 
+TEST(BignumTest, ConstructingABignumFromANegativeInt) {
+    Bignum n(-345);
+
+    ASSERT_EQ(Bignum(d(1, 0x00000159), -1), n);
+}
+
 TEST(BignumTest, ABignumIsEqualToItself) {
     Bignum n(d(1, 2U), 1);
 
@@ -385,11 +391,11 @@ TEST(BignumTest, AbsoluteValueOfZero) {
 }
 
 TEST(BignumTest, PrefixIncrement) {
-    Bignum m(34);
+    Bignum m(-34);
     Bignum n = ++m;
 
-    ASSERT_EQ(Bignum(35), m);
-    ASSERT_EQ(Bignum(35), n);
+    ASSERT_EQ(Bignum(-33), m);
+    ASSERT_EQ(Bignum(-33), n);
 }
 
 TEST(BignumTest, PostfixIncrement) {

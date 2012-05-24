@@ -43,5 +43,7 @@ Bignum operator+(const Bignum& left, const Bignum& right);
 Bignum operator-(const Bignum& left, const Bignum& right);
 Bignum& operator++(Bignum& n);
 Bignum operator++(Bignum& n, int);
+Bignum& operator--(Bignum& n);
+Bignum operator--(Bignum& n, int);
 
 #endif  // __BIGNUM_H__
