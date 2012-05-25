@@ -463,3 +463,25 @@ TEST(BignumTest, RightShiftNegativeOneByOne) {
 
     ASSERT_EQ(Bignum(d(1, 0x0U), 0), n);
 }
+
+
+TEST(BignumTest, RightShiftNegativeOneByOneWithAssignment) {
+    Bignum m(d(1, 0x1U), -1);
+    m >>= 1;
+
+    ASSERT_EQ(Bignum(d(1, 0x0U), 0), m);
+}
+
+TEST(BignumTest, RightShiftByThirteen) {
+    Bignum m(d(1, 0x456789ABU), 1);
+    Bignum n(m >> 13);
+
+    ASSERT_EQ(Bignum(d(1, 0x00022B3CU), 1), n);
+}
+
+TEST(BignumTest, RightShiftByFifteenWithAssignment) {
+    Bignum m(d(1, 0x89897878U), 1);
+    m >>= 15;
+
+    ASSERT_EQ(Bignum(d(1, 0x00011312U), 1), m);
+}
