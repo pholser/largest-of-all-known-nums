@@ -421,3 +421,45 @@ TEST(BignumTest, PostfixDecrement) {
     ASSERT_EQ(Bignum(87), m);
     ASSERT_EQ(Bignum(88), n);
 }
+
+TEST(BignumTest, RightShiftSingleDigitByOne) {
+    Bignum m(d(1, 0x12345678U), 1);
+    Bignum n(m >> 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x091A2B3CU), 1), n);
+}
+
+TEST(BignumTest, RightShiftSingleDigitByOneWithAssignment) {
+    Bignum m(d(1, 0x1234567AU), 1);
+    m >>= 1;
+
+    ASSERT_EQ(Bignum(d(1, 0x091A2B3DU), 1), m);
+}
+
+TEST(BignumTest, RightShiftTheNumberOneByOne) {
+    Bignum m(d(1, 0x1U), 1);
+    Bignum n(m >> 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x0U), 0), n);
+}
+
+TEST(BignumTest, RightShiftNegativeSingleDigitByOne) {
+    Bignum m(d(1, 0xFEDCBA98U), -1);
+    Bignum n(m >> 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x7F6E5D4CU), -1), n);
+}
+
+TEST(BignumTest, RightShiftNegativeSingleDigitByOneWithAssignment) {
+    Bignum m(d(1, 0xBEEFFACEU), -1);
+    m >>= 1;
+
+    ASSERT_EQ(Bignum(d(1, 0x5F77FD67U), -1), m);
+}
+
+TEST(BignumTest, RightShiftNegativeOneByOne) {
+    Bignum m(d(1, 0x1U), -1);
+    Bignum n(m >> 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x0U), 0), n);
+}

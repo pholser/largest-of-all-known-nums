@@ -16,7 +16,7 @@ class Bignum {
 
         const Bignum& operator+=(const Bignum& other);
         const Bignum& operator-=(const Bignum& other);
-
+        const Bignum& operator>>=(unsigned int n);
         bool equal(const Bignum& other) const;
         bool less(const Bignum& other) const;
         Bignum operator-() const;
@@ -45,5 +45,6 @@ Bignum& operator++(Bignum& n);
 Bignum operator++(Bignum& n, int);
 Bignum& operator--(Bignum& n);
 Bignum operator--(Bignum& n, int);
+Bignum operator>>(const Bignum& b, unsigned int n);
 
 #endif  // __BIGNUM_H__

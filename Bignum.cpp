@@ -156,6 +156,10 @@ const Bignum& Bignum::operator+=(const Bignum& other) {
     return *this;
 }
 
+Bignum operator-(const Bignum& left, const Bignum& right) {
+    return Bignum(left) -= right;
+}
+
 const Bignum& Bignum::operator-=(const Bignum& other) {
     if (other.sign == 0) {
         return *this;
@@ -180,8 +184,16 @@ const Bignum& Bignum::operator-=(const Bignum& other) {
     return *this;
 }
 
-Bignum operator-(const Bignum& left, const Bignum& right) {
-    return Bignum(left) -= right;
+Bignum operator>>(const Bignum& b, unsigned int n) {
+    return Bignum(b) >>= n;
+}
+
+const Bignum& Bignum::operator>>=(unsigned int n) {
+    store[0] >>= n;
+
+    reconcile_sign_of_zero();
+
+    return *this;
 }
 
 Bignum Bignum::operator-() const {
