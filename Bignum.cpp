@@ -133,16 +133,15 @@ Bignum operator+(const Bignum& left, const Bignum& right) {
 }
 
 const Bignum& Bignum::operator+=(const Bignum& other) {
-    if (other.sign == 0) {
+    if (other.sign == 0)
         return *this;
-    }
 
     Bignum this_abs = abs();
     Bignum other_abs = other.abs();
 
-    if (sign == other.sign) {
+    if (sign == other.sign)
         store = add(this_abs.store, other_abs.store);
-    } else {
+    else {
         if (this_abs > other_abs)
             store = subtract(this_abs.store, other_abs.store);
         else {
@@ -161,16 +160,15 @@ Bignum operator-(const Bignum& left, const Bignum& right) {
 }
 
 const Bignum& Bignum::operator-=(const Bignum& other) {
-    if (other.sign == 0) {
+    if (other.sign == 0)
         return *this;
-    }
 
     Bignum this_abs = abs();
     Bignum other_abs = other.abs();
 
-    if (sign != other.sign) {
+    if (sign != other.sign)
         store = add(this_abs.store, other_abs.store);
-    } else {
+    else {
         if (this_abs > other_abs)
             store = subtract(this_abs.store, other_abs.store);
         else {
@@ -189,7 +187,15 @@ Bignum operator>>(const Bignum& b, unsigned int n) {
 }
 
 const Bignum& Bignum::operator>>=(unsigned int n) {
-    store[0] >>= n;
+    uint32_t leading(0);
+    uint32_t trailing(0);
+
+    for (std::vector<uint32_t>::reverse_iterator i = store.rbegin(); i != store.rend(); ++i) {
+        trailing = *i & ((1 << n) - 1);
+        *i >>= n;
+        *i |= leading;
+        leading = trailing << (sizeof(uint32_t) * 8 - n);
+    }
 
     reconcile_sign_of_zero();
 
