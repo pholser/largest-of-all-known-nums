@@ -194,7 +194,7 @@ const Bignum& Bignum::operator>>=(unsigned int n) {
         trailing = *i & ((1 << n) - 1);
         *i >>= n;
         *i |= leading;
-        leading = trailing << (sizeof(uint32_t) * 8 - n);
+        leading = trailing << (sizeof(uint32_t) * CHAR_BIT - n);
     }
 
     reconcile_sign_of_zero();
