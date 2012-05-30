@@ -17,11 +17,11 @@ class Bignum {
         const Bignum& operator+=(const Bignum& other);
         const Bignum& operator-=(const Bignum& other);
         const Bignum& operator>>=(unsigned int n);
-        bool equal(const Bignum& other) const;
-        bool less(const Bignum& other) const;
         Bignum operator-() const;
         Bignum abs() const;
 
+        bool equal(const Bignum& other) const;
+        bool less(const Bignum& other) const;
         int signum() const;
 
         friend std::ostream& operator<<(std::ostream& out, const Bignum& n);
