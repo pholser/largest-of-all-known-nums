@@ -10,22 +10,22 @@ class Bignum {
         static const uint64_t BASE;
         static const std::size_t BITS_IN_DIGIT;
 
-        Bignum(int64_t value);
-        Bignum(const std::vector<uint32_t>& digits, int sign);
-        Bignum(const Bignum& other);
-        Bignum& operator=(const Bignum& other);
+        Bignum(int64_t);
+        Bignum(const std::vector<uint32_t>&, int);
+        Bignum(const Bignum&);
+        Bignum& operator=(const Bignum&);
 
-        const Bignum& operator+=(const Bignum& other);
-        const Bignum& operator-=(const Bignum& other);
-        const Bignum& operator>>=(unsigned int n);
+        const Bignum& operator+=(const Bignum&);
+        const Bignum& operator-=(const Bignum&);
+        const Bignum& operator>>=(unsigned int);
         Bignum operator-() const;
         Bignum abs() const;
 
-        bool equal(const Bignum& other) const;
-        bool less(const Bignum& other) const;
+        bool equal(const Bignum&) const;
+        bool less(const Bignum&) const;
         int signum() const;
 
-        friend std::ostream& operator<<(std::ostream& out, const Bignum& n);
+        friend std::ostream& operator<<(std::ostream&, const Bignum&);
 
     private:
         std::vector<uint32_t> store;
@@ -34,18 +34,18 @@ class Bignum {
         void reconcile_sign_of_zero();
 };
 
-bool operator==(const Bignum& left, const Bignum& right);
-bool operator!=(const Bignum& left, const Bignum& right);
-bool operator<(const Bignum& left, const Bignum& right);
-bool operator<=(const Bignum& left, const Bignum& right);
-bool operator>(const Bignum& left, const Bignum& right);
-bool operator>=(const Bignum& left, const Bignum& right);
-Bignum operator+(const Bignum& left, const Bignum& right);
-Bignum operator-(const Bignum& left, const Bignum& right);
-Bignum& operator++(Bignum& n);
-Bignum operator++(Bignum& n, int);
-Bignum& operator--(Bignum& n);
-Bignum operator--(Bignum& n, int);
-Bignum operator>>(const Bignum& b, unsigned int n);
+bool operator==(const Bignum&, const Bignum&);
+bool operator!=(const Bignum&, const Bignum&);
+bool operator<(const Bignum&, const Bignum&);
+bool operator<=(const Bignum&, const Bignum&);
+bool operator>(const Bignum&, const Bignum&);
+bool operator>=(const Bignum&, const Bignum&);
+Bignum operator+(const Bignum&, const Bignum&);
+Bignum operator-(const Bignum&, const Bignum&);
+Bignum& operator++(Bignum&);
+Bignum operator++(Bignum&, int);
+Bignum& operator--(Bignum&);
+Bignum operator--(Bignum&, int);
+Bignum operator>>(const Bignum& n, unsigned int);
 
 #endif  // PHOLSER_BIGNUM_H

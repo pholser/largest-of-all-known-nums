@@ -183,22 +183,22 @@ const Bignum& Bignum::operator-=(const Bignum& other) {
     return *this;
 }
 
-Bignum operator>>(const Bignum& b, unsigned int n) {
-    return Bignum(b) >>= n;
+Bignum operator>>(const Bignum& n, unsigned int increment) {
+    return Bignum(n) >>= increment;
 }
 
-const Bignum& Bignum::operator>>=(unsigned int n) {
+const Bignum& Bignum::operator>>=(unsigned int increment) {
     uint32_t leading(0);
     uint32_t trailing(0);
 
-    store.erase(store.begin(), store.begin() + (n / Bignum::BITS_IN_DIGIT));
+    store.erase(store.begin(), store.begin() + (increment / Bignum::BITS_IN_DIGIT));
 
-    unsigned int increment = n % Bignum::BITS_IN_DIGIT;
+    unsigned int remainder = increment % Bignum::BITS_IN_DIGIT;
     for (std::vector<uint32_t>::reverse_iterator i = store.rbegin(); i != store.rend(); ++i) {
-        trailing = *i & ((1 << increment) - 1);
-        *i >>= increment;
+        trailing = *i & ((1 << remainder) - 1);
+        *i >>= remainder;
         *i |= leading;
-        leading = trailing << (Bignum::BITS_IN_DIGIT - increment);
+        leading = trailing << (Bignum::BITS_IN_DIGIT - remainder);
     }
 
     reconcile_sign_of_zero();
