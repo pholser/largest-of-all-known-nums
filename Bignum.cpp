@@ -53,7 +53,7 @@ std::vector<uint32_t> subtract(const std::vector<uint32_t>& first, const std::ve
     return difference_digits;
 }
 
-Bignum::Bignum(int64_t value) : store() {
+Bignum::Bignum(const int64_t value) : store() {
     sign = value < 0 ? -1 : (value == 0 ? 0 : 1);
     uint64_t no_sign = ::abs(value);
     store.push_back((uint32_t) (no_sign & 0x00000000FFFFFFFFULL));
@@ -61,7 +61,7 @@ Bignum::Bignum(int64_t value) : store() {
     strip_leading_zeros(store);
 }
 
-Bignum::Bignum(const std::vector<uint32_t>& digits, int sign)
+Bignum::Bignum(const std::vector<uint32_t>& digits, const int sign)
     : store(digits), sign(sign) {
 }
 
@@ -183,11 +183,11 @@ const Bignum& Bignum::operator-=(const Bignum& other) {
     return *this;
 }
 
-Bignum operator>>(const Bignum& n, unsigned int increment) {
+Bignum operator>>(const Bignum& n, const unsigned int increment) {
     return Bignum(n) >>= increment;
 }
 
-const Bignum& Bignum::operator>>=(unsigned int increment) {
+const Bignum& Bignum::operator>>=(const unsigned int increment) {
     uint32_t leading(0);
     uint32_t trailing(0);
 

@@ -10,14 +10,14 @@ class Bignum {
         static const uint64_t BASE;
         static const std::size_t BITS_IN_DIGIT;
 
-        Bignum(int64_t);
-        Bignum(const std::vector<uint32_t>&, int);
+        Bignum(const int64_t);
+        Bignum(const std::vector<uint32_t>&, const int);
         Bignum(const Bignum&);
         Bignum& operator=(const Bignum&);
 
         const Bignum& operator+=(const Bignum&);
         const Bignum& operator-=(const Bignum&);
-        const Bignum& operator>>=(unsigned int);
+        const Bignum& operator>>=(const unsigned int);
         Bignum operator-() const;
         Bignum abs() const;
 
@@ -46,6 +46,6 @@ Bignum& operator++(Bignum&);
 Bignum operator++(Bignum&, int);
 Bignum& operator--(Bignum&);
 Bignum operator--(Bignum&, int);
-Bignum operator>>(const Bignum& n, unsigned int);
+Bignum operator>>(const Bignum& n, const unsigned int);
 
 #endif  // PHOLSER_BIGNUM_H
