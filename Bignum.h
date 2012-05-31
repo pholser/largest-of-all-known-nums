@@ -1,5 +1,5 @@
-#ifndef __BIGNUM_H__
-#define __BIGNUM_H__
+#ifndef PHOLSER_BIGNUM_H
+#define PHOLSER_BIGNUM_H
 
 #include <tr1/cstdint>
 #include <vector>
@@ -8,6 +8,7 @@
 class Bignum {
     public:
         static const uint64_t BASE;
+        static const std::size_t BITS_IN_DIGIT;
 
         Bignum(int64_t value);
         Bignum(const std::vector<uint32_t>& digits, int sign);
@@ -47,4 +48,4 @@ Bignum& operator--(Bignum& n);
 Bignum operator--(Bignum& n, int);
 Bignum operator>>(const Bignum& b, unsigned int n);
 
-#endif  // __BIGNUM_H__
+#endif  // PHOLSER_BIGNUM_H

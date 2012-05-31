@@ -499,3 +499,23 @@ TEST(BignumTest, RightShiftMultipleDigitsWithAssignment) {
     ASSERT_EQ(Bignum(d(3, 0x120BD400U, 0x257D5B81U, 0x00000091U), 1), m);
 }
 
+TEST(BignumTest, RightShiftByOneLessThanBigitSize) {
+    Bignum m(d(4, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), -1);
+    Bignum n(m >> 31);
+
+    ASSERT_EQ(Bignum(d(4, 0xBB302515U, 0x06080A0DU, 0x2025DFEEU, 0x00000001U), -1), n);
+}
+
+TEST(BignumTest, RightShiftByOneBigitSize) {
+    Bignum m(d(4, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), -1);
+    Bignum n(m >> 32);
+
+    ASSERT_EQ(Bignum(d(3, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), -1), n);
+}
+
+TEST(BignumTest, RightShiftByOneBigitSizePlusOneWithAssignment) {
+    Bignum m(d(4, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), 1);
+    m >>= 33;
+
+    ASSERT_EQ(Bignum(d(3, 0x6ECC0945U, 0x81820283U, 0x480977FBU), 1), m);
+}

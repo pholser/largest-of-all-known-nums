@@ -1,9 +1,10 @@
+#include "Bignum.h"
 #include <cstdlib>
 #include <cmath>
 #include <algorithm>
-#include "Bignum.h"
 
 const uint64_t Bignum::BASE = UINT32_MAX + 1ULL;
+const std::size_t Bignum::BITS_IN_DIGIT = sizeof(uint32_t) * CHAR_BIT;
 
 uint64_t digit(const std::vector<uint32_t>& digits, std::vector<uint32_t>::size_type index) {
     return index >= digits.size() ? 0U : digits[index];
@@ -190,11 +191,14 @@ const Bignum& Bignum::operator>>=(unsigned int n) {
     uint32_t leading(0);
     uint32_t trailing(0);
 
+    store.erase(store.begin(), store.begin() + (n / Bignum::BITS_IN_DIGIT));
+
+    unsigned int increment = n % Bignum::BITS_IN_DIGIT;
     for (std::vector<uint32_t>::reverse_iterator i = store.rbegin(); i != store.rend(); ++i) {
-        trailing = *i & ((1 << n) - 1);
-        *i >>= n;
+        trailing = *i & ((1 << increment) - 1);
+        *i >>= increment;
         *i |= leading;
-        leading = trailing << (sizeof(uint32_t) * CHAR_BIT - n);
+        leading = trailing << (Bignum::BITS_IN_DIGIT - increment);
     }
 
     reconcile_sign_of_zero();
