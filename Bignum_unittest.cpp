@@ -1,11 +1,11 @@
 #include "Bignum.h"
 #include "gtest/gtest.h"
-#include <vector>
+#include <deque>
 #include <tr1/cstdint>
 #include <cstdarg>
 
-std::vector<uint32_t> d(int num_digits, ...) {
-    std::vector<uint32_t> digits;
+std::deque<uint32_t> d(int num_digits, ...) {
+    std::deque<uint32_t> digits;
 
     va_list args;
     va_start(args, num_digits);
@@ -516,6 +516,104 @@ TEST(BignumTest, RightShiftByOneBigitSize) {
 TEST(BignumTest, RightShiftByOneBigitSizePlusOneWithAssignment) {
     Bignum m(d(4, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), 1);
     m >>= 33;
+
+    ASSERT_EQ(Bignum(d(3, 0x6ECC0945U, 0x81820283U, 0x480977FBU), 1), m);
+}
+
+TEST(BignumTest, LeftShiftSingleDigitByOne) {
+    Bignum m(d(1, 0x12345678U), 1);
+    Bignum n(m << 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x091A2B3CU), 1), n);
+}
+
+TEST(BignumTest, LeftShiftSingleDigitByOneWithAssignment) {
+    Bignum m(d(1, 0x1234567AU), 1);
+    m <<= 1;
+
+    ASSERT_EQ(Bignum(d(1, 0x091A2B3DU), 1), m);
+}
+
+TEST(BignumTest, LeftShiftALeftmostOneByOne) {
+    Bignum m(d(1, 0x80000000U), 1);
+    Bignum n(m << 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x0U), 0), n);
+}
+
+TEST(BignumTest, LeftShiftNegativeSingleDigitByOne) {
+    Bignum m(d(1, 0xFEDCBA98U), -1);
+    Bignum n(m << 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x7F6E5D4CU), -1), n);
+}
+
+TEST(BignumTest, LeftShiftNegativeSingleDigitByOneWithAssignment) {
+    Bignum m(d(1, 0xBEEFFACEU), -1);
+    m <<= 1;
+
+    ASSERT_EQ(Bignum(d(1, 0x5F77FD67U), -1), m);
+}
+
+TEST(BignumTest, LeftShiftNegativeOneByOne) {
+    Bignum m(d(1, 0x1U), -1);
+    Bignum n(m << 1);
+
+    ASSERT_EQ(Bignum(d(1, 0x0U), 0), n);
+}
+
+TEST(BignumTest, LeftShiftNegativeOneByOneWithAssignment) {
+    Bignum m(d(1, 0x1U), -1);
+    m <<= 1;
+
+    ASSERT_EQ(Bignum(d(1, 0x0U), 0), m);
+}
+
+TEST(BignumTest, LeftShiftByThirteen) {
+    Bignum m(d(1, 0x456789ABU), 1);
+    Bignum n(m << 13);
+
+    ASSERT_EQ(Bignum(d(1, 0x00022B3CU), 1), n);
+}
+
+TEST(BignumTest, LeftShiftByFifteenWithAssignment) {
+    Bignum m(d(1, 0x89897878U), 1);
+    m <<= 15;
+
+    ASSERT_EQ(Bignum(d(1, 0x00011312U), 1), m);
+}
+
+TEST(BignumTest, LeftShiftMultipleDigits) {
+    Bignum m(d(3, 0x01234567U, 0x89ABCDEFU, 0x78784949U), 1);
+    Bignum n(m << 7);
+
+    ASSERT_EQ(Bignum(d(3, 0xDE02468AU, 0x9313579BU, 0x00F0F092U), 1), n);
+}
+
+TEST(BignumTest, LeftShiftMultipleDigitsWithAssignment) {
+    Bignum m(d(3, 0x00000034U, 0xC08905EAU, 0x4892BEADU), 1);
+    m <<= 23;
+
+    ASSERT_EQ(Bignum(d(3, 0x120BD400U, 0x257D5B81U, 0x00000091U), 1), m);
+}
+
+TEST(BignumTest, LeftShiftByOneLessThanBigitSize) {
+    Bignum m(d(4, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), -1);
+    Bignum n(m << 31);
+
+    ASSERT_EQ(Bignum(d(4, 0xBB302515U, 0x06080A0DU, 0x2025DFEEU, 0x00000001U), -1), n);
+}
+
+TEST(BignumTest, LeftShiftByOneBigitSize) {
+    Bignum m(d(4, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), -1);
+    Bignum n(m << 32);
+
+    ASSERT_EQ(Bignum(d(3, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), -1), n);
+}
+
+TEST(BignumTest, LeftShiftByOneBigitSizePlusOneWithAssignment) {
+    Bignum m(d(4, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), 1);
+    m <<= 33;
 
     ASSERT_EQ(Bignum(d(3, 0x6ECC0945U, 0x81820283U, 0x480977FBU), 1), m);
 }

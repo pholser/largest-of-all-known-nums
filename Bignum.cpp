@@ -6,21 +6,21 @@
 const uint64_t Bignum::BASE = UINT32_MAX + 1ULL;
 const std::size_t Bignum::BITS_IN_DIGIT = sizeof(uint32_t) * CHAR_BIT;
 
-uint64_t digit(const std::vector<uint32_t>& digits, std::vector<uint32_t>::size_type index) {
+uint64_t digit(const std::deque<uint32_t>& digits, std::deque<uint32_t>::size_type index) {
     return index >= digits.size() ? 0U : digits[index];
 }
 
-void strip_leading_zeros(std::vector<uint32_t>& digits) {
-    for (std::vector<uint32_t>::reverse_iterator i = digits.rbegin(); *i == 0U && digits.size() > 1; ++i)
+void strip_leading_zeros(std::deque<uint32_t>& digits) {
+    for (std::deque<uint32_t>::reverse_iterator i = digits.rbegin(); *i == 0U && digits.size() > 1;)
         digits.erase((++i).base());
 }
 
-std::vector<uint32_t> add(const std::vector<uint32_t>& first, const std::vector<uint32_t>& second) {
-    std::vector<uint32_t>::size_type max_length = std::max(first.size(), second.size());
+std::deque<uint32_t> add(const std::deque<uint32_t>& first, const std::deque<uint32_t>& second) {
+    std::deque<uint32_t>::size_type max_length = std::max(first.size(), second.size());
     uint64_t carry(0);
-    std::vector<uint32_t> sum_digits;
+    std::deque<uint32_t> sum_digits;
 
-    for (std::vector<uint32_t>::size_type i = 0; i < max_length; ++i) {
+    for (std::deque<uint32_t>::size_type i = 0; i < max_length; ++i) {
         uint64_t sum = digit(first, i) + digit(second, i) + carry;
         sum_digits.push_back(sum % Bignum::BASE);
         carry = sum / Bignum::BASE;
@@ -33,12 +33,12 @@ std::vector<uint32_t> add(const std::vector<uint32_t>& first, const std::vector<
     return sum_digits;
 }
 
-std::vector<uint32_t> subtract(const std::vector<uint32_t>& first, const std::vector<uint32_t>& second) {
-    std::vector<uint32_t>::size_type max_length = std::max(first.size(), second.size());
+std::deque<uint32_t> subtract(const std::deque<uint32_t>& first, const std::deque<uint32_t>& second) {
+    std::deque<uint32_t>::size_type max_length = std::max(first.size(), second.size());
     int64_t borrow(0);
-    std::vector<uint32_t> difference_digits;
+    std::deque<uint32_t> difference_digits;
 
-    for (std::vector<uint32_t>::size_type i = 0; i < max_length; ++i) {
+    for (std::deque<uint32_t>::size_type i = 0; i < max_length; ++i) {
         int64_t difference = digit(first, i) - digit(second, i) - borrow;
         if (difference < 0) {
             difference += Bignum::BASE;
@@ -58,10 +58,12 @@ Bignum::Bignum(const int64_t value) : store() {
     uint64_t no_sign = ::abs(value);
     store.push_back((uint32_t) (no_sign & 0x00000000FFFFFFFFULL));
     store.push_back((uint32_t) (no_sign >> 32));
+    std::cout << "boo" << std::endl;
     strip_leading_zeros(store);
+    std::cout << "boo" << std::endl;
 }
 
-Bignum::Bignum(const std::vector<uint32_t>& digits, const int sign)
+Bignum::Bignum(const std::deque<uint32_t>& digits, const int sign)
     : store(digits), sign(sign) {
 }
 
@@ -194,13 +196,23 @@ const Bignum& Bignum::operator>>=(const unsigned int increment) {
     store.erase(store.begin(), store.begin() + (increment / Bignum::BITS_IN_DIGIT));
 
     unsigned int remainder = increment % Bignum::BITS_IN_DIGIT;
-    for (std::vector<uint32_t>::reverse_iterator i = store.rbegin(); i != store.rend(); ++i) {
+    for (std::deque<uint32_t>::reverse_iterator i = store.rbegin(); i != store.rend(); ++i) {
         trailing = *i & ((1 << remainder) - 1);
         *i >>= remainder;
         *i |= leading;
         leading = trailing << (Bignum::BITS_IN_DIGIT - remainder);
     }
 
+    reconcile_sign_of_zero();
+
+    return *this;
+}
+
+Bignum operator<<(const Bignum& n, const unsigned int increment) {
+    return Bignum(n) <<= increment;
+}
+
+const Bignum& Bignum::operator<<=(const unsigned int increment) {
     reconcile_sign_of_zero();
 
     return *this;
@@ -241,7 +253,7 @@ std::ostream& operator<<(std::ostream& out, const Bignum& n) {
     out << "sign: " << n.sign << std::endl;
     out << "digits: " << std::endl;
 
-    for (std::vector<uint32_t>::size_type i = 0; i != n.store.size(); ++i)
+    for (std::deque<uint32_t>::size_type i = 0; i != n.store.size(); ++i)
         out << i << ": " << std::hex << n.store[i] << std::endl;
 
     return out;
