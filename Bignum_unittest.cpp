@@ -524,96 +524,98 @@ TEST(BignumTest, LeftShiftSingleDigitByOne) {
     Bignum m(d(1, 0x12345678U), 1);
     Bignum n(m << 1);
 
-    ASSERT_EQ(Bignum(d(1, 0x091A2B3CU), 1), n);
+    ASSERT_EQ(Bignum(d(1, 0x2468ACF0U), 1), n);
 }
 
 TEST(BignumTest, LeftShiftSingleDigitByOneWithAssignment) {
     Bignum m(d(1, 0x1234567AU), 1);
     m <<= 1;
 
-    ASSERT_EQ(Bignum(d(1, 0x091A2B3DU), 1), m);
+    ASSERT_EQ(Bignum(d(1, 0x2468ACF4U), 1), m);
 }
 
 TEST(BignumTest, LeftShiftALeftmostOneByOne) {
     Bignum m(d(1, 0x80000000U), 1);
     Bignum n(m << 1);
 
-    ASSERT_EQ(Bignum(d(1, 0x0U), 0), n);
+    ASSERT_EQ(Bignum(d(2, 0x00000000U, 0x00000001U), 1), n);
 }
 
 TEST(BignumTest, LeftShiftNegativeSingleDigitByOne) {
     Bignum m(d(1, 0xFEDCBA98U), -1);
     Bignum n(m << 1);
 
-    ASSERT_EQ(Bignum(d(1, 0x7F6E5D4CU), -1), n);
+    ASSERT_EQ(Bignum(d(2, 0xFDB97530U, 0x00000001U), -1), n);
 }
 
 TEST(BignumTest, LeftShiftNegativeSingleDigitByOneWithAssignment) {
     Bignum m(d(1, 0xBEEFFACEU), -1);
     m <<= 1;
 
-    ASSERT_EQ(Bignum(d(1, 0x5F77FD67U), -1), m);
+    ASSERT_EQ(Bignum(d(2, 0x7DDFF59CU, 0x00000001), -1), m);
 }
 
 TEST(BignumTest, LeftShiftNegativeOneByOne) {
-    Bignum m(d(1, 0x1U), -1);
+    Bignum m(d(1, 0x00000001U), -1);
     Bignum n(m << 1);
 
-    ASSERT_EQ(Bignum(d(1, 0x0U), 0), n);
+    ASSERT_EQ(Bignum(d(1, 0x00000002U), -1), n);
 }
 
 TEST(BignumTest, LeftShiftNegativeOneByOneWithAssignment) {
-    Bignum m(d(1, 0x1U), -1);
+    Bignum m(d(1, 0x00000C00U), -1);
     m <<= 1;
 
-    ASSERT_EQ(Bignum(d(1, 0x0U), 0), m);
+    ASSERT_EQ(Bignum(d(1, 0x00001800U), -1), m);
 }
 
 TEST(BignumTest, LeftShiftByThirteen) {
     Bignum m(d(1, 0x456789ABU), 1);
     Bignum n(m << 13);
 
-    ASSERT_EQ(Bignum(d(1, 0x00022B3CU), 1), n);
+    ASSERT_EQ(Bignum(d(2, 0xF1356000U, 0x000008ACU), 1), n);
 }
 
 TEST(BignumTest, LeftShiftByFifteenWithAssignment) {
     Bignum m(d(1, 0x89897878U), 1);
     m <<= 15;
 
-    ASSERT_EQ(Bignum(d(1, 0x00011312U), 1), m);
+    ASSERT_EQ(Bignum(d(2, 0xBC3C0000U, 0x000044C4U), 1), m);
 }
 
 TEST(BignumTest, LeftShiftMultipleDigits) {
     Bignum m(d(3, 0x01234567U, 0x89ABCDEFU, 0x78784949U), 1);
     Bignum n(m << 7);
 
-    ASSERT_EQ(Bignum(d(3, 0xDE02468AU, 0x9313579BU, 0x00F0F092U), 1), n);
+    ASSERT_EQ(Bignum(d(4, 0x91A2B380U, 0xD5E6F780U, 0x3C24A4C4, 0x0000003CU), 1), n);
 }
 
 TEST(BignumTest, LeftShiftMultipleDigitsWithAssignment) {
     Bignum m(d(3, 0x00000034U, 0xC08905EAU, 0x4892BEADU), 1);
     m <<= 23;
 
-    ASSERT_EQ(Bignum(d(3, 0x120BD400U, 0x257D5B81U, 0x00000091U), 1), m);
+    ASSERT_EQ(Bignum(d(4, 0x1A000000U, 0xF5000000U, 0x56E04482U, 0x0024495FU), 1), m);
 }
 
 TEST(BignumTest, LeftShiftByOneLessThanBigitSize) {
     Bignum m(d(4, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), -1);
     Bignum n(m << 31);
 
-    ASSERT_EQ(Bignum(d(4, 0xBB302515U, 0x06080A0DU, 0x2025DFEEU, 0x00000001U), -1), n);
+    ASSERT_EQ(Bignum(d(5, 0x00000000U, 0x4C0BA1E7U, 0x6ECC0945U, 0x81820283U, 0x480977FB), -1), n);
 }
 
 TEST(BignumTest, LeftShiftByOneBigitSize) {
     Bignum m(d(4, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), -1);
     Bignum n(m << 32);
 
-    ASSERT_EQ(Bignum(d(3, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), -1), n);
+    ASSERT_EQ(Bignum(d(5, 0x00000000U, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), -1), n);
 }
 
 TEST(BignumTest, LeftShiftByOneBigitSizePlusOneWithAssignment) {
     Bignum m(d(4, 0x981743CEU, 0xDD98128AU, 0x03040506U, 0x9012EFF7U), 1);
     m <<= 33;
 
-    ASSERT_EQ(Bignum(d(3, 0x6ECC0945U, 0x81820283U, 0x480977FBU), 1), m);
+    ASSERT_EQ(
+        Bignum(d(6, 0x00000000U, 0x302E879CU, 0xBB302515U, 0x06080A0DU, 0x2025DFEEU, 0x00000001U), 1),
+        m);
 }

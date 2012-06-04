@@ -58,9 +58,7 @@ Bignum::Bignum(const int64_t value) : store() {
     uint64_t no_sign = ::abs(value);
     store.push_back((uint32_t) (no_sign & 0x00000000FFFFFFFFULL));
     store.push_back((uint32_t) (no_sign >> 32));
-    std::cout << "boo" << std::endl;
     strip_leading_zeros(store);
-    std::cout << "boo" << std::endl;
 }
 
 Bignum::Bignum(const std::deque<uint32_t>& digits, const int sign)
@@ -195,12 +193,12 @@ const Bignum& Bignum::operator>>=(const unsigned int increment) {
 
     store.erase(store.begin(), store.begin() + (increment / Bignum::BITS_IN_DIGIT));
 
-    unsigned int remainder = increment % Bignum::BITS_IN_DIGIT;
+    unsigned int shift_amount = increment % Bignum::BITS_IN_DIGIT;
     for (std::deque<uint32_t>::reverse_iterator i = store.rbegin(); i != store.rend(); ++i) {
-        trailing = *i & ((1 << remainder) - 1);
-        *i >>= remainder;
+        trailing = *i & ((1 << shift_amount) - 1);
+        *i >>= shift_amount;
         *i |= leading;
-        leading = trailing << (Bignum::BITS_IN_DIGIT - remainder);
+        leading = trailing << (Bignum::BITS_IN_DIGIT - shift_amount);
     }
 
     reconcile_sign_of_zero();
@@ -213,6 +211,27 @@ Bignum operator<<(const Bignum& n, const unsigned int increment) {
 }
 
 const Bignum& Bignum::operator<<=(const unsigned int increment) {
+    uint32_t leading(0);
+    uint32_t trailing(0);
+
+    unsigned int number_of_trailing_zeros = increment / Bignum::BITS_IN_DIGIT;
+
+    unsigned int shift_amount = increment % Bignum::BITS_IN_DIGIT;
+    if (shift_amount > 0) {
+        for (std::deque<uint32_t>::iterator i = store.begin(); i != store.end(); ++i) {
+            leading = *i & ~((1 << (Bignum::BITS_IN_DIGIT - shift_amount)) - 1);
+            *i <<= shift_amount;
+            *i |= trailing;
+            trailing = leading >> (Bignum::BITS_IN_DIGIT - shift_amount);
+        }
+    }
+
+    if (trailing != 0)
+        store.push_back(trailing);
+
+    for (unsigned int i = 0; i < number_of_trailing_zeros; ++i)
+        store.push_front(0x0U);
+
     reconcile_sign_of_zero();
 
     return *this;
